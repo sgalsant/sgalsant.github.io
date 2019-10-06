@@ -10,7 +10,7 @@ rectangle notacion <<sistema>>{
 :actor A: -down-> (caso uso A)
 
 (caso uso A) <|-- (caso uso B)
-(caso uso C) -up.> (caso uso A) :<<include>>
+(caso uso A) -down.> (caso uso C) :<<include>>
 (caso uso D) -up.> (caso uso A) :<<extend>>
 
 note right of :actor A:
