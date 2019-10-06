@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=1024" />
+    	<meta name="apple-mobile-web-app-capable" content="yes" />
+ 		
+ 		<title>ingeniería del software</title>
+    	<meta name="description" content="" />
+     	<meta name="author" content="Santiago Galván Sánchez" />
+
+     	 <link  rel="stylesheet"  href="css/impress.css" />
+    </head>
+    <body class="impress-not-supported">
+    	<div class="fallback-message">
+   			 <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    		<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+		</div>
+
+		<div id="impress">
+			<div id="title" class="step" data-x="0" data-y="0" data-scale="4">
+        		<h1>Ingeniería del software</h1>
+
+    		</div>
+
+			 <div class="step" data-rel-x="-1000" data-rel-y="-1500">
+        		<p>La ingeniería de software es una disciplina formada por un conjunto de <strong>métodos</strong>, <strong>herramientas</strong> y <strong>técnicas</strong> que se utilizan en el desarrollo de los programas informáticos (software).</p>
+
+    		 </div>
+    		
+    		<div class="step" data-rel-x="1000" data-rel-y="0">
+        		<p> Esta disciplina trasciende la actividad de programación.</p>
+        		<p class="substep">La programación es un paso más dentro del desarrollo.</p>
+    		</div>
+			
+			<div class="step" data-rel-x="1000" data-rel-y="0" data-rotate="90">
+    			<p>Según la definición del IEEE la ingeniería del software se define como <cite>la aplicación de un método sistemático, disciplinado y cuantificable al desarrollo, operación y mantenimiento de software</cite></p>
+    		</div>
+    		<div class="step" data-rel-x="1000" data-rel-y="0">
+        		 <p>la metodología establece el camino que se debe seguir para desarrollar el software</p>
+        		 <img src="img/metodologia.jpg"</img>
+    		</div>
+
+    		<div class="step" data-rel-x="1000" data-rel-y="0">
+        		 <p>La técnica establece el procedimiento a seguir para realizar cada uno de los pasos del camino a seguir</p>
+    		</div>
+
+    		<div id="software" class="step" data-rel-x="2000" data-rel-y="-300" data-z="-3000">
+    			<p>El producto de desarrollo es más que el código</p>
+    			<ul>
+    				<li class="substep">Incluye documentación, formación a usuarios, instalación y mantenimiento</li>
+    				<li class="substep">Para el equipo de desarrollo supone experiencia, formación, cohesión del grupo</li>
+    			</ul>
+    		</div>
+
+    		<div id="ciclo" class="step slide fondo1" data-rel-to="title" data-rel-x="-1000" data-rel-y="1500" data-autoplay="2">
+    			<h1>Ciclo de vida en el Desarrollo de Software</h1>
+    			<ul>
+    				<li class="substep"><strong>Requisitos</strong>: toma de requisitos de alto nivel sobre qué tiene que hacer el sistema que hay que desarrollar.</li>
+					<li class="substep"><strong>Análisis</strong>: estudio de los requisitos.</li>
+					<li class="substep"><strong>Diseño</strong>: elección de los diferentes componentes tecnológicos y cómo van a interactuar entre ellos</li>
+					<li class="substep"><strong>Implementación</strong>: implementación de las diferentes funcionalidades por medio de lenguajes de programación o parametrización de paquetes o sistemas preexistentes</li>
+					<li class="substep"><strong>Pruebas</strong>: Para confirmar que lo desarrollado se ajusta a lo requisitos y que no existe fallos de sistema.</li>
+					<li class="substep"><strong>Implantación</strong>: aunque en ocasiones se olvida, el despliegue y capacitación de los usuarios también es parte del ciclo de vida del software y debe ser tenido en cuenta dentro de su gestión.</li>
+					<li class="substep"><strong>Mantenimiento</strong></li>
+    			</ul>
+    		</div>
+
+
+    		<div id="implantacion" class="step slide fondo2" data-rel-x="0" data-rel-y="1000" data-rotate="90">
+    			<h1>Implantación</h1>
+    			<ul>
+    				<li>Despliegue de infraestructura: servidores, equipos, etc</li>
+    				<li>Elementos adicionales de seguridad: cortafuegos, servidores replicados, copias de seguridad automáticas</li>
+    				<li>Formación a usuarios</li>
+    			</ul>
+    		</div>
+
+     		<div id="mantenimiento" class="step slide fondo1" data-rel-x="0" data-rel-y="1000" data-rotate="90">
+     			<h1>Mantenimiento</h1>
+    			<ul>
+    				<li>Gestión de incidencias</li>
+    				<li>Identificación de ataques de seguridad y ejecución de contramedidas</li>
+    				<li>Formación a usuarios</li>
+    			</ul>
+    		</div>    
+
+			<div id="cascada"	class="step slide" data-rel-to="ciclo"	data-rel-x="1000" data-rel-y="0">
+    			<h1>Modelo en cascada</h1>
+    		
+    	
+    			<img class="full" src="img/modelo-en-cascada.png" />
+    		</div>
+
+    	
+    		<div id="cascada2"	class="step slide" data-rel-x="0" data-rel-y="750">
+    			<h1>Modelo en cascada</h1>
+    			<p>Se finaliza una etapa para continuar a la siguiente</p>
+    			<p>Desventajas principales:</p>
+    				<ul>
+    					<li>No se adapta bien a los cambios en los requisitos ni a la incertidumbre ni riesgos</li>
+    					<li>Entrega final completa</li>
+    				</ul>
+    		
+    			<img width="auto" height="300px" src="img/modelo-en-cascada.png" />
+ 
+    		</div>
+
+    		<div id="iterativo-inc"	class="step slide" data-rel-to="cascada" data-rel-x="1000" data-rel-y="0" data-rotate="180">
+    			<h1>Modelo iterativo e incremental</h1>
+    		    <p>Se repite el proceso añadiendo funcionalidades a un producto entregable al final de cada iteración</p>
+    	
+    			<img class="full" style="height:80%" src="img/iterativo-incremental.png" />
+    		</div>
+
+    		<div id="iterativo-inc2"	class="step slide" data-rel-x="0" data-rel-y="750" data-rotate="180">
+    			<h1>Modelo iterativo e incremental</h1>
+
+    			<img style="float:right; height:50%" src="img/iterativo-incremental.png" />
+    		    <p>La idea principal detrás de mejoramiento iterativo es desarrollar un sistema de manera incremental, permitiéndole al desarrollador sacar ventaja de lo que se ha aprendido a lo largo del desarrollo anterior, incrementando, versiones entregables del sistema.</p>
+    		    <p> El aprendizaje viene de dos vertientes: el desarrollo del sistema, y su uso (mientras sea posible).</p>
+    		</div>
+
+	   		<div id="agil"	class="step" data-rel-to="iterativo-inc" data-rel-x="2000" data-rel-z="200" data-rel-y="0" data-rotate="90">  	
+    			<img  class="full2"  src="img/manifiesto-agil.jpg" />
+    		</div>    	
+    
+    		<div id="agil2"	class="step" data-rel-x="200" data-rel-y="500" data-rel-z="-500" data-rotate="90">  	
+    			<img  class="full"  src="img/agil-valores.png" />
+    		</div>    		
+
+			<div id="agil3"	class="step" data-rel-x="200" data-rel-y="800" data-rel-z="-500" data-rotate="90">  	
+    			<img  class="full2"  src="img/agil-principios.jpg" />
+    		</div>   
+
+    		<div id="scrum"	class="step" data-rel-to="agil" data-rel-x="2000" data-rel-y="0">  	
+    			<img class="full2"  src="img/ciclo-scrum.png" />
+    		</div>
+
+			<div id="scrum-backload"	class="step slide"  data-rel-x="0" data-rel-y="750">  	
+    			<img class="full"  src="img/scrum-product-backlog.png" />
+    		</div>
+
+   			<div id="scrum-task-board"	class="step slide"  data-rel-x="0" data-rel-y="750">  	
+    			<img class="full"  src="img/scrum-task-board.png" />
+    		</div>
+
+  			<div id="scrum-roles"	class="step"  data-rel-x="0" data-rel-y="750">  	
+    			<img class="full"  src="img/scrum-roles.png" />
+    		</div>
+
+			<div id="scrum-implicado" class="step" data-rel-x="0" data-rel-y="750" data-rotate="0" data-rel-z="200">
+    			<h1>¿Estás implicado o comprometido?</h1>
+    			<p class="substep">Los roles en Scrum se dividen en dos grupos principales, los comprometidos y los implicados.</p>
+    			<p class="substep">¿En qué se diferencia entre estar comprometido o implicado?</p>    	
+    		</div>
+
+    		<div id="scrum-cerdo" class="step" data-rel-x="0" data-rel-y="600" data-rotate-z="90">		   
+    			<img src="img/scrum-cerdo-gallina.jpg" class="full2"/>	
+    		</div>
+   		
+   		     <div id="scrum-cerdo2" class="step" data-rel-x="0" data-rel-y="600" data-rotate-z="90" data-rel-z="2000">		   
+    			<img src="img/scrum-pigs.png" class="full2"/>	
+    		</div>
+
+    		
+
+    		<div id="overview" class="step" data-x="3000" data-y="1500" data-z="0" data-scale="10">
+    		</div>
+		</div>
+<div id="impress-toolbar"></div>
+		<script src="js/impress.js"></script>
+		<script >impress().init();</script>
+    </body>
+</html>
