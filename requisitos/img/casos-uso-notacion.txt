@@ -1,0 +1,49 @@
+@startuml
+
+title Notación de los casos de uso
+header Entorno de desarrollo
+
+rectangle notacion <<sistema>>{
+
+:actor A: <|-- :actor B:
+
+:actor A: -down-> (caso uso A)
+
+(caso uso A) <|-- (caso uso B)
+(caso uso C) -up.> (caso uso A) :<<include>>
+(caso uso D) -up.> (caso uso A) :<<extend>>
+
+note right of :actor A:
+  los actores son los usuarios y otros sistemas
+  que interactúan con el nuestro
+end note
+
+note top of (caso uso A)
+   caso de uso principal es aquel que se relaciona
+   directamente con un actor
+end note
+
+note left of :actor B: 
+  es un tipo de actor A
+end note
+
+note bottom of (caso uso B)
+  es un tipo de caso A
+end note
+
+note bottom of (caso uso C)
+   el caso de uso C forma parte de la 
+   secuencia principal de A
+end note
+
+note bottom of (caso uso D)
+   el caso de uso D forma parte de una
+   secuencia alternativa/excepción de A
+end note
+
+}
+
+note top of notacion
+   límite del sistema
+end note
+@enduml
