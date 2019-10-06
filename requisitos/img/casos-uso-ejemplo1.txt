@@ -1,0 +1,28 @@
+@startuml
+
+title Ejemplo caso de uso
+header Entorno de desarrollo
+
+actor santiago <<profesor>>
+usecase enseñar_plantuml as "enseñar casos de uso"
+
+note top of enseñar_plantuml 
+  Pon atención
+end note
+
+santiago -down-> enseñar_plantuml
+
+usecase mostrar_ejemplo as "mostrar ejemplos"
+usecase explicar_sintaxis as "explicar sintaxis"
+usecase proponer_actividades as "proponer actividades"
+
+
+enseñar_plantuml -down.> mostrar_ejemplo :<<include>>
+enseñar_plantuml -down.> explicar_sintaxis :<<include>>
+enseñar_plantuml -down.> proponer_actividades :<<include>>
+
+(aclarar dudas) -left.> enseñar_plantuml :<<extend>>
+
+(enseñar) <|- enseñar_plantuml 
+
+@enduml

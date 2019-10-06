@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=1024" />
+    	<meta name="apple-mobile-web-app-capable" content="yes" />
+ 		
+ 		<title>Requisitos</title>
+    	<meta name="description" content="" />
+     	<meta name="author" content="Santiago Galván Sánchez" />
+
+     	 <link  rel="stylesheet"  href="css/impress.css" />
+    </head>
+    <body class="impress-not-supported">
+    	<div class="fallback-message">
+   			 <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    		<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+		</div>
+
+		<div id="impress">
+			<div id="title" class="step title" data-x="0" data-y="0" data-scale="4">
+        		<h1>Requisitos de software</h1>
+    		</div>
+
+			 <div class="step slide" data-rel-y="-1500">
+			 	<h1>¿Qué es un requisito?</h1>
+			 	<ul>
+			 		<li>Condición o capacidad que un usuario necesita para poder resolver un problema o lograr un objetivo (IEEE).</li>
+			 		<li>Condición o capacidad que debe exhibir o poseer un sistema para satisfacer un contrato, estándar, especificación, u otra documentación formalmente impuesta (IEEE).</li>
+			 		<li>Una condición o capacidad que debe ser conformada por el sistema (RUP).</li>
+			 		<li>Algo que el sistema debe hacer o una cualidad que el sistema debe poseer (Robertson - Robertson).</li>
+        		</ul>
+    		 </div>
+    		
+    		<div class="step slide" data-rel-x="1000" data-rel-y="0">
+        		<h1>Tipos requisitos</h1>
+        		<ol>
+        			<li>Requisitos funcionales. Indica algo que el sistema debe hacer.</li>
+        			<li>Requisitos no funcionales. Indica una característica del sistema, de la funciones del mismo: compatibilidad, rendimiento, seguridad, etc.</li>
+        		</ol>
+    		</div>
+			
+			<div class="step" data-rel-x="1200" data-rel-y="0" data-rotate="90" data-scale="2">
+    			<img src="img/toma-requisitos.jpg"/>
+    		</div>
+    		
+  			<div class="step slide" data-rel-to="title"  data-rel-y="1500">
+        		<h1>Especificación de requisitos</h1>
+        		<ol>
+        			<li>Historias de usuario. Definen lo que los usuarios quieren</li>
+        			<li>Casos de uso. Definen la interacción entre los usuarios y el sistema.</li>
+        			<img class="full2" src="img/HistoriasUsuarioVersusCasosDeUso.jpg"/>
+        		</ol>
+    		</div>
+
+    		<div id="historia" class="step slide" data-rel-x="1000" data-rel-y="0">
+        		<h1>Historias de usuario</h1>
+        		<p>Una historia de usuario es una representación de un requisito escrito en una o dos frases utilizando el lenguaje común del usuario.</p>
+        		<p>Las historias de usuario son utilizadas en las metodologías de desarrollo ágiles.</p>
+        		<p>Las historias de usuario tienen el tamaño necesario para aportar valor al usuario y poder implementarse en un spring</p>
+    		</div>
+
+			<div class="step" data-rel-x="10" data-rel-y="220" data-scale="0.2" data-rel-z="100">
+    			<img src="img/PostItHistoriaUsuario.png" />
+    		</div>
+
+    		<div class="step slide"  data-rel-to="historia" data-rel-x="0" data-rel-y="800" data-rel-z="0">
+    			<h1>Historias de usuario</h1>
+    			<p>Cómo "usuario" quiero "funcionalidad" para "beneficio"</p>
+    			<img class="full" src="img/ejemplo-historia-usuario.png" />
+    		</div>	
+
+    		<div class="step" data-rel-x="0" data-rel-y="800">
+    			<img class="full2" src="img/historia-plantilla.jpg" />
+    			<p>Una historia debería tener como máximo 4 criterios de aceptación</p>
+    		</div>
+
+	 		<div class="step" data-rel-x="0" data-rel-y="800">
+    			<p>Una <strong>épica</strong> es una historia demasiado grande para ser desarrollada en un sprint o demasiado compleja. </p>
+    			<p>Una épica se descompone en historias más pequeñas</p>
+    		</div>
+
+
+			<div id="ccc" class="step"  data-rel-x="-200" data-rel-y="800" data-rel-z="-100" data-scale="1">
+				<img class="full2" src="img/historias-CCC.png">
+			</div>
+
+    		<div class="step slide"  data-rel-x="900" data-rel-y="0" data-rel-z="0">
+    			<h1>Componentes de historias de usuario</h1>
+    			<p>Una Historia de Usuario se compone de 3 elementos, también conocidos como “las tres Cs”de las Historias de Usuario:</p>
+    			<ul>
+    				<li><strong>Card</strong> (Ficha) – Toda historia de usuario debe poder describirse en una ficha de papel pequeña. Si una Historia de Usuario no puede describirse en ese tamaño, es una señal de que estamos traspasando las fronteras y comunicando demasiada información que debería compartirse cara a cara.</li>
+    				<li><strong>Conversación</strong> – Toda historia de usuario debe tener una conversación con el Product Owner. Una comunicación cara a cara que intercambia no solo información sino también pensamientos, opiniones y sentimientos.</li>
+    				<li><strong>Confirmación</strong> – Toda historia de usuario debe estar lo suficientemente explicada para que el equipo de desarrollo sepa qué es lo que debe construir y qué es lo que el Product Owner espera. Esto se conoce también como <strong>Criterios de Aceptación</strong>.</li>
+    			</ul>
+    		</div>	
+
+    		<div class="step" data-rel-x="1200" data-rel-y="0" data-rel-z="-100" data-scale="2">
+    			<h1>Características de una correcta historia de usuario</h1>
+				<img class="full2" src="img/historias-invest.png">
+			</div>
+
+			<div class="step" data-rel-x="1000" data-rel-y="0" data-rotate-y="50">
+				<img class="full2" src="img/temas-epica-historias-tareas.jpg"/>
+			</div>
+
+			<div class="step"  data-rel-to="historia" data-rel-x="1000" data-rel-y="0" data-rel-z="0">
+    			<img class="full2" src="img/casos-uso-ejemplo1.png" />			
+			</div>
+
+			<div class="step slide"  data-rel-x="1000">
+				<h1>Casos de uso</h1>
+    			<p>Los casos de uso especifican un comportamiento deseado del sistema, representan requisitos funcionales del mismo.</p>
+    			<p>Describen qué hace el sistema, no cómo lo hace. 
+    			<p>UML nos dice que: “Un caso de uso especifica un conjunto de secuencias de acciones, incluyendo variantes, que el sistema puede ejecutar y que produce un resultado observable de valor para un particular actor”. </p>
+    			<p>Los casos de uso nos sirven de base para elaborar los aspectos funcionales del pliego de condiciones y nos dan soporte en las etapas de modelado, desarrollo y validación de software.</p>		
+			</div>				
+
+			<div class="step"  data-rel-x="1000">
+    			<img class="full2" src="img/casos-uso-notacion.svg" />			
+			</div>	
+
+			<div class="step slide" data-rel-x="1000">
+				<h1>Elementos de un caso de uso</h1>
+				<ul>
+					<li>Conjunto de secuencias de acciones, cada secuencia representa un posible comportamiento del sistema.</li>
+					<li>Actores, se tratan de los roles que pueden jugar los agentes que interactúan con el sistema. Los roles son jugados por personas, dispositivos, u otros sistemas. Podríamos distinguir entre actores primarios, para los cuales el objetivo del caso de uso es esencial y actores secundarios, que interactúan con el caso de uso, pero cuyo objetivo no es esencial.</li>
+					<li>Variantes, son versiones especializadas, un caso de uso que extiende a otro o un caso de uso que incluye a 
+					otro.</li>
+				</ul>
+
+				<p style="margin-top:100px;""><a style="text-decoration-line:overline underline" href="https://www.seas.es/blog/informatica/tipos-de-relaciones-en-diagramas-de-casos-de-uso-uml/">consultar</a></p>
+
+			</div>
+
+			<div class="step slide" data-rel-x="1000">
+				<p>En los diagramas de casos de uso se muestran: casos de uso (representados en forma de elipses), actores (en forma de personajes) y  relaciones (en forma de líneas y/o flechas)</p>
+				<img class="full2" src="img/casos-uso-relacion.png" />
+			</div>
+			
+			<div class="step slide" data-rel-x="1000">
+				<h1>Inclusión</h1>
+				<p> Un caso de uso base incorpora explícitamente el comportamiento de otro en algún lugar de su secuencia.</p>
+				<p> La relación de inclusión sirve para enriquecer un caso de uso con otro y compartir una funcionalidad común entre varios casos de uso, también puede utilizarse para estructurar un caso de uso describiendo sus subfunciones.</p>
+				 <img class="full2" src="img/casos-uso-inclusion.png" />
+			</div>
+
+			<div class="step slide" data-rel-x="1000">
+				<h1>Extensión</h1>
+                <p>El caso de uso secundario se ejecuta en una secuencia opcional del caso de uso principal</p>
+                <p>Si no existiera el caso de uso que extiende el caso de uso principal se podría ejecutar en su secuencia base</p>
+                <img class="full2" src="img/casos-uso-extension.png" />
+			</div>
+
+			<div class="step slide" data-rel-x="1000">
+				<h1>Especialización y generalización de casos de uso y actores</h1>
+				<p>La punta de flecha señala el actor o caso de uso más general</p>
+				<img class="full2" src="img/casos-uso-generalizacion.png" />
+			</div>
+
+			<div class="step" data-rel-x="1000" data-rotate-y="50">
+				<img class="full2" src="img/casos-uso-secuencia.png" />
+			</div>
+
+			<div id="scrum-estimacion" class="step slide fondo2" data-rel-to="title" data-rel-x="1900" data-rotate-z="0">		   
+    			<h1>Puntos de historia</h1>
+    			<p>Los puntos de historia miden la <strong>complejidad</strong> de las historias, estableciendo una escala</p>
+    			
+    			<p class="substep">La complejidad de las historias, los puntos de historia, <em>no se pueden comparar a horas de esfuerzo</em> ya que el sentido que tienen es catalogar la dificultad de la tarea.</p>
+    			<p class="substep"> El número de horas que nos lleve realizarlas dependerá de la capacitación y/o capacidad de la persona que la lleve a cabo, la carga de trabajo del equipo, etc. y por ello variará dicho valor dependiendo de la situación.</p>
+    		</div>
+
+ 			<div id="scrum-estimacion2" class="step slide fondo2" data-rel-x="1000" data-rel-y="0" >		   
+    			<h1>Los puntos de historia se calculan en base a:</h1>
+    			<ul>
+    				<li class="substep">Complejidad: Una historia que es más compleja que otra tendrá más puntos historia.</li>
+    				<li class="substep">Esfuerzo: Quizás una historia no tiene complejidad pero si requiere esfuerzo (ejemplo, cambiar literales en todas las pantallas de la aplicación), también tendrá más puntos historia que otra más corta.</li>
+    				<li class="substep">Incertidumbre o riesgo: Es la probabilidad de que algo no esperado aparezca en la historia, siempre por falta de información previa. </li>
+    				<li class="substep">Aquí no se cuenta lo que suele ir mal. Por ejemplo, si cada vez que tocamos el módulo de autenticación rompemos algo, eso no debe reflejarse en la estimación (porque no queremos tapar los puntos de mejora).</li>
+    			</ul>	
+    		</div>
+
+    		<div id="scrum-estimacion3" class="step slide fondo2" data-rel-x="1000">	
+    			<h1>Estimación de póquer - puntos de historia</h1>
+    			<p>Los puntos de historia miden la complejidad de las historias.</p>
+    			<img class="full" src="img/baraja_planning_poker.png" />		
+    		</div>
+
+   			<div id="scrum-estimacion4" class="step slide fondo2" data-rel-x="1000" data-rel-y="0">	
+    			<h1>Estimación de póquer - puntos de historia</h1>
+    			<ul>
+    				<li>Cada participante de la reunión tiene un juego de cartas.</li>
+					<li>Para cada tarea (historia de usuario o funcionalidad, según sea el nivel de requisitos que se va a estimar) el cliente, moderador o propietario del producto expone la descripción empleando un tiempo máximo.</li>
+					<li>Hay establecido otro tiempo para que el cliente o propietario del producto atienda a las posibles preguntas del equipo.</li>
+					<li>Cada participarte selecciona la carta, o cartas que representan su estimación, y las separa del resto, boca abajo.
+Cuando todos han hecho su selección, se muestran boca arriba.</li>
+					<li>Si la estimación resulta “infinito”, por sobrepasar el límite máximo establecido, la tarea debe dividirse en sub-tareas de menor tamaño.</li>
+				</ul>
+    		</div>
+
+    		<div id="scrum-estimacion5" class="step slide fondo2" data-rel-x="1000" data-rel-y="0">	
+    			<p>Si las estimaciones resultan muy dispares, quien asume la responsabilidad de gestionar la reunión, con su criterio de gestión, y basándose en las características del proyecto, equipo, reunión, nº de elementos pendientes de evaluar, puede optar por:</p>
+    			<ul>
+    				<li>Preguntar a las personas de las estimaciones extremas: ¿Por qué crees que es necesario tanto tiempo?, y ¿por qué crees que es necesario tan poco tiempo? Tras escuchar las razones, repetir la estimación.</li>
+    				<li>Dejar a un lado la estimación de esa tarea y retomar al final o en otro momento aquellas que hayan quedado pendientes.</li>
+    				<li>Pedir al cliente o propietario del producto que descomponga la funcionalidad y valorar cada una de las funcionalidades resultantes.</li>
+    				<li>Tomar la estimación menor, mayor, o la media.</li>
+    		</div>
+
+    		<div id="overview" class="step" data-x="3000" data-y="1500" data-z="0" data-scale="10">
+    		</div>
+		</div>
+		
+		<div id="impress-toolbar"></div>
+		<script src="js/impress.js"></script>
+		<script >impress().init();</script>
+    </body>
+</html>
