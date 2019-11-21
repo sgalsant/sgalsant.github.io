@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=1024" />
+    	<meta name="apple-mobile-web-app-capable" content="yes" />
+ 		
+ 		<title>Pruebas</title>
+    	<meta name="description" content="" />
+     	<meta name="author" content="Santiago Galván Sánchez" />
+
+     	 <link  rel="stylesheet"  href="css/impress.css" />
+    </head>
+    <body class="impress-not-supported">
+    	<div class="fallback-message">
+   			 <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+    		<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+		</div>
+
+		<div id="impress">
+			<div id="title" class="step title" data-x="0" data-y="0" data-scale="4">
+        		<h1>Pruebas de software</h1>
+    		</div>
+
+    		<div class="step" data-rel-y="-1500" data-rel-x="1500">
+    			<p>Las pruebas no son opcionales, se deben realizar.</p>
+    			<p>Las pruebas se automatizan en la medida de lo posible.</p>
+    		</div>
+
+			 <div class="step" data-rel-y="0" data-rel-x="900">
+			 	<h1>Tipos de pruebas funcionales:</h1>
+			 	<ul>
+			 		<li>Pruebas unitarias.</li>
+			 		<li>Pruebas de integración.</li>
+			 		<li>Pruebas de aceptación.</li>
+			 		<li>Pruebas de integración.</li>
+			 		<li>Pruebas de regresión.</li>
+			 	</ul>
+    		 </div>
+  
+ 			<div class="step">
+			 	<h1>Tipos de pruebas no funcionales:</h1>
+			 	<ul>
+			 		<li>Pruebas de carga.</li>
+			 		<li>Pruebas de estrés.</li>
+			 		<li>Pruebas de escalabilidad.</li>
+			 		<li>Pruebas de portabilidad.</li>
+			 		<li>Pruebas de seguridad</li>
+			 		<li>Pruebas de usabilidad</li>
+			 	</ul>
+    		 </div>
+
+    		 <div class="step">
+    		 	<h1>Pruebas unitarias</h1>
+    		 	<p>Se realiza sobre una unidad de desarrollo:función o una clase</p>
+    		 </div>
+
+    		 <div class="step">
+    		 	<h1>Pruebas integración</h1>
+    		 	<p>En la prueba interviene diferentes funciones y/o clases.</p>
+    		 </div>
+
+    		 <div class="step">
+    		 	<h1>Pruebas regresión</h1>
+    		 	<p>Se vuelve a realizar las pruebas tras la modificación del software</p>
+    		 </div>
+
+    		 <div class="step">
+    		 	<h1>Pruebas aceptación</h1>
+    		 	<p>Pruebas sobre todo el software. Prueba la funcionalidad final del software.</p>
+    		 </div>
+
+    		 <div class="step">
+    		 	<h1>Pruebas integración continua</h1>
+    		 	<p>Los test se ejecutan de forma automática y periódica.</p>
+    		 </div>
+
+    		<div class="step" data-y="0" data-x="900">
+    			<h1>TDD Test Driven Developement</h1>
+    			<p>En castellano: Desarrollo guiado por pruebas</p>
+            </div>
+
+	 		<div class="step" data-rel-x="900">
+    			<h1>TDD Test Driven Developement</h1>
+    			<p>Primero escribimos los test que expresan los requerimientos a cumplir, luego desarrollamos para cumplir con dichos requerimientos.</p>
+            </div>
+
+ 			<div class="step" data-rel-x="900">
+    			<h1>TDD Test Driven Developement</h1>
+    			<p>Si se aprecia un error, primero se crea un test que identifica el error y luego se modifica el código para que pase el test</p>
+            </div>
+
+
+    		 <div class="step" >
+    		 	<img class="full2" src="img/tdd.png">
+    		 </div>
+
+ 		 	 <div class="step">
+    		 	<img class="full2" src="img/tdd2.png">
+    		 </div>
+
+
+    		<div class="step">
+    			<p>Aplicando TDD conseguimos un código más robusto, más seguro, más mantenible y una mayor rapidez en el desarrollo</p>
+            </div>
+
+            <div class="step" data-y="1900" data-x="0">
+            	<img class="full2" src="img/mocha.png">
+            </div>
+
+      		<div class="step" data-rel-y="0" data-rel-x="900">
+    			<h1>Mocha</h1>
+    			<p>Framework de prueba para Javascript</p>
+    			<p>Se ejecuta en NodeJs o directamente en el navegador</p>
+    			<small><a href="https://mochajs.org/">url página oficial</a></small>
+            </div>  
+
+            <div class="step">
+    			<h1>Chai</h1>
+    			<p>chai es una librería de aserción = comprobaciones</p>
+    		    <p>chai tiene varias interfaces: <mark>assert</mark>, expect y should</p>
+    			<small><a href="https://www.chaijs.com/api/assert/">url página oficial</a></small>
+            </div>    
+
+            <div class="step">
+    			<h1>Instalar Mocha + Chai</h1>
+    			<p>Ejecutamos en la carpeta de nuestro proyecto:</p>
+<pre><code>npm i -D mocha
+npm i -D chai
+</code></pre>
+            </div>
+
+            <div class="step">
+            	<p>Creamos en nuestro proyecto una carpeta llamada "test"<p>
+            	<p>En esta carpeta vamos a poner todos los ficheros con los tests: *.test.js</p>
+            	<p>Además, en la carpeta raíz situamos la página html para ejecutar los tests: test.html</p>
+            </div>
+
+            <div class="step">
+            	<img class="full2" src="img/mocha_html.png">
+            </div>
+
+             <div class="step">
+    			<p>La plantilla de esta página se encuenta en el directorio "node_modules/mocha"</p>
+            </div> 
+
+            <div class="step">
+            	<img class="full2" src="img/it-ejemplo.png">
+            </div>    
+
+    		<div id="overview" class="step" data-x="3000" data-y="1500" data-z="0" data-scale="10">
+    		</div>
+		</div>
+		
+		<div id="impress-toolbar"></div>
+		<script src="js/impress.js"></script>
+		<script >impress().init();</script>
+    </body>
+</html>
