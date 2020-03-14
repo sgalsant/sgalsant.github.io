@@ -106,6 +106,7 @@
 
             Quagga.onDetected(function (result) {
                 console.log("Barcode detected and processed : [" + result.codeResult.code + "]", result);
+                document.getElementById('code').innerHtml = result.codeResult.code;
             });
         }
 
@@ -119,6 +120,7 @@
             }
         }, false);
     </script>
+    <span id="code">codigo</span>
 </body>
 
 </html>
