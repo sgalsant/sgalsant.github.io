@@ -26,7 +26,7 @@ class App {
         });
         this._sourceSelect.selectedIndex = idx;
         this._barcodeReader.sourceDeviceId = devices[idx].deviceId;
-        this.decode();
+        setTimeout(this.decode.bind(this), 1500);
     }
     decode() {
         this._barcodeReader.decode(this.decoded.bind(this));
