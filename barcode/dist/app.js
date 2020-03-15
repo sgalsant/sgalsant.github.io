@@ -4,28 +4,34 @@ class App {
         this._barcodeReader = new BarcodeReader();
         this._audio = new AudioContext();
     }
-    changedVideoInputDevice() {
+    changedVideoInputDevice(event) {
         this._barcodeReader.sourceDeviceId = this._sourceSelect.value;
-        this._result.innerText = "cambiado video: " + this._sourceSelect.value;
         this.decode();
     }
     showVideoInputDevices(devices) {
-        const sourceSelect = document.getElementById('sourceSelect');
         if (devices.length == 0) {
             return;
         }
         let idx = 0;
         devices.forEach((element) => {
-            const sourceOption = document.createElement('option');
             if (element.label.toUpperCase().indexOf('BACK') >= 0) {
                 idx = element.deviceId;
             }
+            let sourceOption = document.createElement('option');
             sourceOption.text = element.label;
             sourceOption.value = element.deviceId;
-            sourceSelect.appendChild(sourceOption);
+            this._sourceSelect.appendChild(sourceOption);
         });
+        /*    let sourceOption = document.createElement('option')
+            sourceOption.text ="otro";
+            sourceOption.value = "00x";
+            this._sourceSelect.appendChild(sourceOption)
+    
+        */
         this._sourceSelect.selectedIndex = idx;
         this._barcodeReader.sourceDeviceId = devices[idx].deviceId;
+        //     this._sourceSelect.addEventListener('cnange', this.changedVideoInputDevice.bind(this));
+        this._sourceSelect.onchange = this.changedVideoInputDevice.bind(this);
         setTimeout(this.decode.bind(this), 1500);
     }
     decode() {
@@ -62,7 +68,6 @@ class App {
         this._sourceSelect = document.getElementById('sourceSelect');
         this._result = document.getElementById('code');
         document.getElementById('decode').addEventListener('click', this.decode.bind(this));
-        this._sourceSelect.addEventListener('cnange', this.changedVideoInputDevice.bind(this));
         this._barcodeReader.getVideoInputDevices(this.showVideoInputDevices.bind(this));
     }
     main() {
