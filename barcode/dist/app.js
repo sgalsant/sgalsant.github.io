@@ -31,7 +31,11 @@ class App {
     }
     decoded(code) {
         console.log(code);
-        this._result.innerText = code;
+        let codigos = this._result.value.split("/n");
+        if (codigos.indexOf(code) >= 0) {
+            return;
+        }
+        this._result.value += "/n" + code;
         this.decode();
     }
     init() {
