@@ -34,14 +34,13 @@ class App {
     decoded(code) {
         console.log(code);
         let codigos = this._result.value.split("\n");
-        if (codigos.indexOf(code) >= 0) {
-            return;
-        }
-        if (this._result.value.length > 0) {
-            this._result.value += "\n" + code;
-        }
-        else {
-            this._result.value = code;
+        if (codigos.indexOf(code) < 0) {
+            if (this._result.value.length > 0) {
+                this._result.value += "\n" + code;
+            }
+            else {
+                this._result.value = code;
+            }
         }
         this.decode();
     }
