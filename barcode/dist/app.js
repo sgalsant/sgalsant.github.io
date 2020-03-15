@@ -7,7 +7,7 @@ class App {
     changedVideoInputDevice() {
         this._barcodeReader.sourceDeviceId = this._sourceSelect.value;
         this._result.innerText = "cambiado video: " + this._sourceSelect.value;
-        this._barcodeReader.decode();
+        this.decode();
     }
     showVideoInputDevices(devices) {
         const sourceSelect = document.getElementById('sourceSelect');
