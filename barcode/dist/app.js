@@ -2,6 +2,7 @@ import { BarcodeReader } from './barcode.js';
 class App {
     constructor() {
         this._barcodeReader = new BarcodeReader();
+        this._audio = new AudioContext();
     }
     changedVideoInputDevice() {
         this._barcodeReader.sourceDeviceId = this._sourceSelect.value;
@@ -31,6 +32,17 @@ class App {
         this._barcodeReader.decode(this.decoded.bind(this));
         //  this.decoded("12"+Math.trunc(Math.random()*3));
     }
+    beep(vol = 60, freq = 520, duration = 200) {
+        let v = this._audio.createOscillator();
+        let u = this._audio.createGain();
+        v.connect(u);
+        v.frequency.value = freq;
+        v.type = "square";
+        u.connect(this._audio.destination);
+        u.gain.value = vol * 0.01;
+        v.start(this._audio.currentTime);
+        v.stop(this._audio.currentTime + duration * 0.001);
+    }
     decoded(code) {
         console.log(code);
         let codigos = this._result.value.split("\n");
@@ -42,6 +54,7 @@ class App {
                 this._result.value = code;
             }
         }
+        this.beep();
         navigator.vibrate(200);
         setTimeout(this.decode.bind(this), 1500);
     }
