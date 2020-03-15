@@ -1,9 +1,11 @@
 video {
-    border: 1px solid red;
-    width:95%;
+    border: 1px solid gray;
+    width:100%;
     height:300px;
 }
 
-textarea {
-    display:block;
+button {
+  display: block;
+  width:50%;
+  margin: 10px auto;
 }
