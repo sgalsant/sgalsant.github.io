@@ -5,6 +5,7 @@ class App {
     }
     changedVideoInputDevice() {
         this._barcodeReader.sourceDeviceId = this._sourceSelect.value;
+        this._result.innerText = "cambiado video: " + this._sourceSelect.value;
         this._barcodeReader.decode();
     }
     showVideoInputDevices(devices) {
@@ -12,17 +13,18 @@ class App {
         if (devices.length == 0) {
             return;
         }
-        let id = 0;
+        let idx = 0;
         devices.forEach((element) => {
             const sourceOption = document.createElement('option');
             if (element.label.toUpperCase().indexOf('BACK')) {
-                id = element.deviceId;
+                idx = element.deviceId;
             }
             sourceOption.text = element.label;
             sourceOption.value = element.deviceId;
             sourceSelect.appendChild(sourceOption);
         });
-        this._barcodeReader.sourceDeviceId = devices[id].deviceId;
+        this._sourceSelect.selectedIndex = idx;
+        this._barcodeReader.sourceDeviceId = devices[idx].deviceId;
     }
     decode() {
         this._barcodeReader.decode(this.decoded.bind(this));
