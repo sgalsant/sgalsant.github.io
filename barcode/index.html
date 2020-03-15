@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style/barcode.css">
+    <title>Barcode reader - inventario</title>
+    <script src="./dist/zxing.js"></script>
+    <script type="module" src="./dist/app.js"></script>
+</head>
+<body>
+    <div>
+        <video id="video" width="600" height="400"></video>
+    </div>
+
+    <div id="sourceSelectPanel">
+        <label for="sourceSelect">Change video source:</label>
+        <select id="sourceSelect" style="min-width:100px; max-width:400px">
+        </select>
+    </div>
+
+    <button id="decode">leer</button>
+
+    <label>Resultado:</label>
+    <pre><code id="code"></code></pre>
+</body>
+</html>
