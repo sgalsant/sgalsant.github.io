@@ -29,7 +29,7 @@ class App {
     }
     decode() {
         this._barcodeReader.decode(this.decoded.bind(this));
-        // this.decoded("12"+Math.trunc(Math.random()*3));
+        //  this.decoded("12"+Math.trunc(Math.random()*3));
     }
     decoded(code) {
         console.log(code);
