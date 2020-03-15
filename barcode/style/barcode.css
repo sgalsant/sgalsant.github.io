@@ -3,3 +3,7 @@ video {
     width:95%;
     height:300px;
 }
+
+textarea {
+    display:block;
+}
