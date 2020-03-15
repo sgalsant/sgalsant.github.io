@@ -16,7 +16,7 @@ class App {
         let idx = 0;
         devices.forEach((element) => {
             const sourceOption = document.createElement('option');
-            if (element.label.toUpperCase().indexOf('BACK')) {
+            if (element.label.toUpperCase().indexOf('BACK') >= 0) {
                 idx = element.deviceId;
             }
             sourceOption.text = element.label;
@@ -25,9 +25,11 @@ class App {
         });
         this._sourceSelect.selectedIndex = idx;
         this._barcodeReader.sourceDeviceId = devices[idx].deviceId;
+        this.decode();
     }
     decode() {
         this._barcodeReader.decode(this.decoded.bind(this));
+        // this.decoded("12"+Math.trunc(Math.random()*3));
     }
     decoded(code) {
         console.log(code);
@@ -35,15 +37,20 @@ class App {
         if (codigos.indexOf(code) >= 0) {
             return;
         }
-        this._result.value += "\n" + code;
+        if (this._result.value.length > 0) {
+            this._result.value += "\n" + code;
+        }
+        else {
+            this._result.value = code;
+        }
         this.decode();
     }
     init() {
         this._sourceSelect = document.getElementById('sourceSelect');
-        this._barcodeReader.getVideoInputDevices(this.showVideoInputDevices.bind(this));
-        this._sourceSelect.addEventListener('cnange', this.changedVideoInputDevice.bind(this));
         this._result = document.getElementById('code');
         document.getElementById('decode').addEventListener('click', this.decode.bind(this));
+        this._sourceSelect.addEventListener('cnange', this.changedVideoInputDevice.bind(this));
+        this._barcodeReader.getVideoInputDevices(this.showVideoInputDevices.bind(this));
     }
     main() {
         document.addEventListener("DOMContentLoaded", this.init.bind(this));
