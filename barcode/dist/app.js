@@ -5,16 +5,24 @@ class App {
     }
     changedVideoInputDevice() {
         this._barcodeReader.sourceDeviceId = this._sourceSelect.value;
+        this._barcodeReader.decode();
     }
     showVideoInputDevices(devices) {
         const sourceSelect = document.getElementById('sourceSelect');
-        this._barcodeReader.sourceDeviceId = devices[0].deviceId;
+        if (devices.length == 0) {
+            return;
+        }
+        let id = 0;
         devices.forEach((element) => {
             const sourceOption = document.createElement('option');
+            if (element.label.toUpperCase().indexOf('BACK')) {
+                id = element.deviceId;
+            }
             sourceOption.text = element.label;
             sourceOption.value = element.deviceId;
             sourceSelect.appendChild(sourceOption);
         });
+        this._barcodeReader.sourceDeviceId = devices[id].deviceId;
     }
     decode() {
         this._barcodeReader.decode(this.decoded.bind(this));
