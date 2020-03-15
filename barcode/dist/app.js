@@ -36,12 +36,13 @@ class App {
         let codigos = this._result.value.split("\n");
         if (codigos.indexOf(code) < 0) {
             if (this._result.value.length > 0) {
-                this._result.value += "\n" + code;
+                this._result.value = code + "\n" + this._result.value;
             }
             else {
                 this._result.value = code;
             }
         }
+        navigator.vibrate(200);
         setTimeout(this.decode.bind(this), 1500);
     }
     init() {
