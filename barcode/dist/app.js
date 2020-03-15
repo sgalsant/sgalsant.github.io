@@ -42,7 +42,7 @@ class App {
                 this._result.value = code;
             }
         }
-        this.decode();
+        setTimeout(this.decode.bind(this), 1500);
     }
     init() {
         this._sourceSelect = document.getElementById('sourceSelect');
