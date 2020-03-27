@@ -59,6 +59,7 @@ class App {
             else {
                 this._result.value = code;
             }
+            this.beep();
         }
         navigator.vibrate(200);
         setTimeout(this.decode.bind(this), 1500);
@@ -71,6 +72,10 @@ class App {
     }
     main() {
         document.addEventListener("DOMContentLoaded", this.init.bind(this));
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./serviceworker.js');
+        }
+        ;
     }
 }
 let app = new App();
