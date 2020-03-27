@@ -1,0 +1,15 @@
+{
+    "name": "barcode",
+    "short_name": "barcode",
+    "description": "Aplicación para leer códigos de barras",
+    "lang": "es",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "icons": [
+      {
+        "src": "homescreen.webp",
+        "sizes": "512x512",
+        "type": "image/webp"
+      }
+    ]
+  }
