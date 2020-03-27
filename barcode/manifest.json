@@ -7,9 +7,14 @@
     "display": "standalone",
     "icons": [
       {
-        "src": "homescreen.webp",
+        "src": "home512.png",
         "sizes": "512x512",
-        "type": "image/webp"
-      }
+        "type": "image/png"
+      },
+      {
+        "src": "home192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }  
     ]
   }
