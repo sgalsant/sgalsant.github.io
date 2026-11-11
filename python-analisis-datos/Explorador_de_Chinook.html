@@ -1,0 +1,588 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Explorador de Chinook</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: herramienta de dos zonas — diagrama relacional a la izquierda, ficha de la tabla a la derecha (apiladas en móvil) */
+:root {
+  --bg: #F1F6F5;
+  --surface: #FBFDFC;
+  --surface-2: #E8F1EF;
+  --fg: #12211F;
+  --muted: #55706B;
+  --line: #C9DBD7;
+  --accent: #0F766E;
+  --accent-soft: #D9EEEA;
+  --on-group: #F6FBFA;
+  --g-cat: #0F766E;
+  --g-ven: #9A4E1C;
+  --g-org: #4B4EA0;
+  --pk: #8F6A00;
+  --pk-soft: #F6EBC8;
+  --fk: #2563A8;
+  --fk-soft: #DDE9F7;
+  --code-bg: #10282A;
+  --code-fg: #D7EDE9;
+  --code-str: #F2C57C;
+  --code-com: #8FBFB7;
+  --font-ui: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", "Consolas", "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1B1A; --surface: #132826; --surface-2: #1A3431; --fg: #E4F1EE; --muted: #9AB7B1; --line: #2A4643;
+    --accent: #4FC3B3; --accent-soft: #173F3A; --on-group: #F6FBFA;
+    --g-cat: #1B8478; --g-ven: #A9592A; --g-org: #5A5DB8;
+    --pk: #E3B341; --pk-soft: #3A3014; --fk: #74A9E6; --fk-soft: #18304A;
+    --code-bg: #08171A; --code-fg: #D7EDE9; --code-str: #F2C57C; --code-com: #86B3AC;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1B1A; --surface: #132826; --surface-2: #1A3431; --fg: #E4F1EE; --muted: #9AB7B1; --line: #2A4643;
+  --accent: #4FC3B3; --accent-soft: #173F3A; --on-group: #F6FBFA;
+  --g-cat: #1B8478; --g-ven: #A9592A; --g-org: #5A5DB8;
+  --pk: #E3B341; --pk-soft: #3A3014; --fk: #74A9E6; --fk-soft: #18304A;
+  --code-bg: #08171A; --code-fg: #D7EDE9; --code-str: #F2C57C; --code-com: #86B3AC;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 40px;
+}
+.wrap { max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 24px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 4px; }
+h1 { font-size: clamp(24px, 3.2vw, 34px); font-weight: 700; line-height: 1.15; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: 6px 0 0; max-width: 64ch; }
+.stats { display: flex; gap: 20px; font-variant-numeric: tabular-nums; }
+.stat b { display: block; font-size: 22px; font-weight: 700; line-height: 1.1; }
+.stat span { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: 500 14px var(--font-ui); color: var(--fg); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+}
+.chip .dot { width: 10px; height: 10px; border-radius: 50%; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+.chip:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.search { position: relative; flex: 1 1 260px; max-width: 420px; }
+.search input {
+  width: 100%; font: 14px var(--font-ui); color: var(--fg); background: var(--surface); border: 1px solid var(--line);
+  border-radius: 10px; padding: 9px 12px;
+}
+.search input::placeholder { color: var(--muted); }
+.results { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.results:empty { display: none; }
+.res {
+  font: 13px var(--font-mono); color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 6px;
+  padding: 3px 8px; cursor: pointer;
+}
+.res-note { font-size: 13px; color: var(--muted); width: 100%; }
+
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 20px; align-items: start; }
+@media (max-width: 1100px) { .main { grid-template-columns: minmax(0, 1fr); } }
+
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; display: flex; flex-direction: column; min-width: 0; }
+.diag-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); align-items: center; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.badge { font: 600 11px var(--font-mono); border-radius: 4px; padding: 1px 5px; letter-spacing: 0.02em; }
+.badge.pk { background: var(--pk-soft); color: var(--pk); border: 1px solid var(--pk); }
+.badge.fk { background: var(--fk-soft); color: var(--fk); border: 1px solid var(--fk); }
+.zoom { display: flex; gap: 6px; }
+.zoom button {
+  font: 600 14px var(--font-ui); color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+  min-width: 36px; height: 32px; padding: 0 10px; cursor: pointer;
+}
+.acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.acts button {
+  font: 600 13px var(--font-ui); color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 8px;
+  height: 32px; padding: 0 12px; cursor: pointer;
+}
+.acts button[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--fg); }
+.hint { font-size: 12.5px; color: var(--muted); padding: 0 16px 8px; margin: 0; }
+.canvas { overflow: auto; padding: 8px; }
+svg#er { display: block; height: auto; }
+
+/* SVG */
+.tbl { cursor: pointer; transition: opacity .2s; }
+.tbl .body { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.tbl .head-t { fill: var(--on-group); font: 600 15px var(--font-ui); }
+.tbl .col-t { fill: var(--fg); font: 13px var(--font-mono); }
+.tbl .more-t { fill: var(--muted); font: italic 12px var(--font-ui); }
+.tbl .bpk { fill: var(--pk-soft); stroke: var(--pk); }
+.tbl .bpk-t { fill: var(--pk); font: 600 10px var(--font-mono); }
+.tbl .bfk { fill: var(--fk-soft); stroke: var(--fk); }
+.tbl .bfk-t { fill: var(--fk); font: 600 10px var(--font-mono); }
+.tbl:hover .body { stroke: var(--accent); }
+.tbl.sel .body { stroke: var(--accent); stroke-width: 2.5; }
+.tbl.cur .body { stroke: var(--accent); stroke-width: 4; }
+.tbl.match .body { stroke: var(--pk); stroke-width: 3; }
+.tbl.dim, .edge.dim { opacity: 0.22; }
+.edge path.ln { fill: none; stroke: var(--muted); stroke-width: 1.6; }
+.edge path.hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; }
+.edge text { fill: var(--muted); font: 600 12px var(--font-mono); }
+.edge.on path.ln { stroke: var(--accent); stroke-width: 2.6; }
+.edge.on text { fill: var(--accent); }
+.edge:hover path.ln { stroke: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .tbl { transition: none; } }
+
+/* Ficha */
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.p-head { display: flex; flex-direction: column; gap: 6px; }
+.p-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.p-name { font: 700 24px var(--font-mono); margin: 0; }
+.group-pill { font-size: 12px; font-weight: 600; color: var(--on-group); border-radius: 999px; padding: 2px 10px; }
+.p-desc { margin: 0; color: var(--muted); }
+.p-meta { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+h2.sec { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 8px; }
+.cols-wrap { overflow-x: auto; }
+table.cols { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.cols th { text-align: left; font-weight: 600; color: var(--muted); font-size: 12px; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.cols td { padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.cols td.cn { font-family: var(--font-mono); font-weight: 600; white-space: nowrap; }
+table.cols td.ty { font-family: var(--font-mono); color: var(--muted); white-space: nowrap; }
+table.cols td.k { white-space: nowrap; }
+table.cols td.k .badge + .badge { margin-left: 4px; }
+table.cols tr.hl td { background: var(--accent-soft); }
+.nn { font-size: 12px; color: var(--muted); }
+.nn.req { color: var(--fg); font-weight: 600; }
+.ref { font: 12px var(--font-mono); color: var(--fk); background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; display: block; margin-top: 2px; }
+.rels { display: flex; flex-direction: column; gap: 8px; }
+.rel {
+  display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; align-items: baseline; text-align: left;
+  font: 13px var(--font-ui); color: var(--fg); background: var(--surface-2); border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; cursor: pointer;
+}
+.rel:hover { border-color: var(--accent); }
+.rel .card { font: 600 12px var(--font-mono); color: var(--accent); }
+.rel .path { font-family: var(--font-mono); font-size: 12.5px; overflow-wrap: anywhere; }
+.rel .why { grid-column: 2; color: var(--muted); font-size: 12.5px; }
+.empty-note { color: var(--muted); font-size: 13px; margin: 0; }
+.tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+.tab { font: 600 13px var(--font-ui); color: var(--muted); background: none; border: 1px solid transparent; border-radius: 8px; padding: 5px 12px; cursor: pointer; }
+.tab[aria-selected="true"] { color: var(--fg); background: var(--surface-2); border-color: var(--line); }
+.code-box { position: relative; }
+pre.code {
+  margin: 0; background: var(--code-bg); color: var(--code-fg); font: 12.5px/1.55 var(--font-mono); padding: 14px 16px; border-radius: 10px;
+  overflow-x: auto; white-space: pre;
+}
+pre.code .s { color: var(--code-str); }
+pre.code .c { color: var(--code-com); }
+.copy {
+  position: absolute; top: 8px; right: 8px; font: 600 12px var(--font-ui); color: var(--code-fg); background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 6px; padding: 4px 10px; cursor: pointer;
+}
+.q-label { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
+footer { font-size: 13px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">Python y bases de datos · Modelo de datos</p>
+      <h1>Explorador de Chinook</h1>
+      <p class="sub">Diagrama relacional de la base de datos de los ejemplos. Toca una tabla o una relación para ver sus columnas, claves y una consulta lista para probar.</p>
+    </div>
+    <div class="stats" aria-label="Resumen del modelo">
+      <div class="stat"><b id="st-t">11</b><span>tablas</span></div>
+      <div class="stat"><b id="st-r">11</b><span>relaciones</span></div>
+      <div class="stat"><b id="st-c">64</b><span>columnas</span></div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="chips" role="group" aria-label="Filtrar por área">
+      <button class="chip" id="f-all" data-g="all" aria-pressed="true">Todas</button>
+      <button class="chip" id="f-cat" data-g="cat" aria-pressed="false"><span class="dot" style="background:var(--g-cat)"></span>Catálogo</button>
+      <button class="chip" id="f-ven" data-g="ven" aria-pressed="false"><span class="dot" style="background:var(--g-ven)"></span>Ventas</button>
+      <button class="chip" id="f-org" data-g="org" aria-pressed="false"><span class="dot" style="background:var(--g-org)"></span>Organización</button>
+    </div>
+    <div class="search">
+      <label class="eyebrow" for="q" style="display:block">Buscar columna</label>
+      <input id="q" type="search" placeholder="Ej.: Id, Country, Price…" autocomplete="off">
+      <div class="results" id="results"></div>
+    </div>
+  </div>
+
+  <div class="main">
+    <section class="diagram" aria-label="Diagrama relacional">
+      <div class="diag-bar">
+        <div class="legend">
+          <span><span class="badge pk">PK</span> clave primaria</span>
+          <span><span class="badge fk">FK</span> clave ajena</span>
+          <span><b style="font-family:var(--font-mono);color:var(--fg)">N — 1</b> muchos a uno</span>
+        </div>
+        <div class="acts">
+          <button id="a-all" type="button" aria-pressed="false">Activar todas</button>
+          <button id="a-multi" type="button" aria-pressed="false">Selección múltiple</button>
+        </div>
+        <div class="zoom">
+          <button id="z-out" type="button" aria-label="Alejar">−</button>
+          <button id="z-fit" type="button">Ajustar</button>
+          <button id="z-in" type="button" aria-label="Acercar">+</button>
+        </div>
+      </div>
+      <p class="hint" id="hint">Consejo: Ctrl/⌘ + clic (o «Selección múltiple») suma tablas a la selección sin perder las anteriores.</p>
+      <div class="canvas" id="canvas">
+        <svg id="er" viewBox="0 0 1170 610" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama entidad-relación de Chinook con 11 tablas"></svg>
+      </div>
+    </section>
+
+    <aside class="panel" id="panel" aria-live="polite"></aside>
+  </div>
+
+  <footer>Esquema de la versión SQLite de Chinook (Chinook_Sqlite.sqlite, repositorio lerocha/chinook-database). Los recuentos de filas son los del fichero original, sin modificar.</footer>
+</div>
+
+<script>
+const GROUPS = {
+  cat: { name: "Catálogo", color: "var(--g-cat)" },
+  ven: { name: "Ventas", color: "var(--g-ven)" },
+  org: { name: "Organización", color: "var(--g-org)" }
+};
+// [nombre, tipo, opciones] — opciones: pk, nn (NOT NULL), fk: "Tabla.Columna"
+const T = {
+  Artist: { g: "cat", rows: 275, x: 910, y: 230, desc: "Artistas e intérpretes del catálogo.", cols: [
+    ["ArtistId", "INTEGER", { pk: 1 }], ["Name", "NVARCHAR(120)", {}]] },
+  Album: { g: "cat", rows: 347, x: 910, y: 40, desc: "Álbumes. Cada álbum pertenece a un único artista.", cols: [
+    ["AlbumId", "INTEGER", { pk: 1 }], ["Title", "NVARCHAR(160)", { nn: 1 }], ["ArtistId", "INTEGER", { nn: 1, fk: "Artist.ArtistId" }]] },
+  Track: { g: "cat", rows: 3503, x: 620, y: 40, desc: "Pistas a la venta: la tabla central del catálogo.", cols: [
+    ["TrackId", "INTEGER", { pk: 1 }], ["Name", "NVARCHAR(200)", { nn: 1 }], ["AlbumId", "INTEGER", { fk: "Album.AlbumId" }],
+    ["MediaTypeId", "INTEGER", { nn: 1, fk: "MediaType.MediaTypeId" }], ["GenreId", "INTEGER", { fk: "Genre.GenreId" }],
+    ["Composer", "NVARCHAR(220)", {}], ["Milliseconds", "INTEGER", { nn: 1 }], ["Bytes", "INTEGER", {}], ["UnitPrice", "NUMERIC(10,2)", { nn: 1 }]] },
+  MediaType: { g: "cat", rows: 5, x: 910, y: 360, desc: "Formato del fichero de cada pista (MPEG, AAC, vídeo…).", cols: [
+    ["MediaTypeId", "INTEGER", { pk: 1 }], ["Name", "NVARCHAR(120)", {}]] },
+  Genre: { g: "cat", rows: 25, x: 910, y: 480, desc: "Géneros musicales: Rock, Jazz, Metal, Blues…", cols: [
+    ["GenreId", "INTEGER", { pk: 1 }], ["Name", "NVARCHAR(120)", {}]] },
+  Playlist: { g: "org", rows: 18, x: 330, y: 40, desc: "Listas de reproducción.", cols: [
+    ["PlaylistId", "INTEGER", { pk: 1 }], ["Name", "NVARCHAR(120)", {}]] },
+  PlaylistTrack: { g: "org", rows: 8715, x: 330, y: 190, desc: "Tabla intermedia que resuelve la relación N:M entre listas y pistas. Su clave primaria es compuesta.", cols: [
+    ["PlaylistId", "INTEGER", { pk: 1, nn: 1, fk: "Playlist.PlaylistId" }], ["TrackId", "INTEGER", { pk: 1, nn: 1, fk: "Track.TrackId" }]] },
+  Customer: { g: "ven", rows: 59, x: 40, y: 330, desc: "Clientes de la tienda. Cada uno tiene asignado un empleado de soporte.", cols: [
+    ["CustomerId", "INTEGER", { pk: 1 }], ["FirstName", "NVARCHAR(40)", { nn: 1 }], ["LastName", "NVARCHAR(20)", { nn: 1 }],
+    ["Company", "NVARCHAR(80)", {}], ["Address", "NVARCHAR(70)", {}], ["City", "NVARCHAR(40)", {}], ["State", "NVARCHAR(40)", {}],
+    ["Country", "NVARCHAR(40)", {}], ["PostalCode", "NVARCHAR(10)", {}], ["Phone", "NVARCHAR(24)", {}], ["Fax", "NVARCHAR(24)", {}],
+    ["Email", "NVARCHAR(60)", { nn: 1 }], ["SupportRepId", "INTEGER", { fk: "Employee.EmployeeId" }]] },
+  Invoice: { g: "ven", rows: 412, x: 330, y: 400, desc: "Facturas: la cabecera de cada compra, con la dirección de facturación y el total.", cols: [
+    ["InvoiceId", "INTEGER", { pk: 1 }], ["CustomerId", "INTEGER", { nn: 1, fk: "Customer.CustomerId" }], ["InvoiceDate", "DATETIME", { nn: 1 }],
+    ["BillingAddress", "NVARCHAR(70)", {}], ["BillingCity", "NVARCHAR(40)", {}], ["BillingState", "NVARCHAR(40)", {}],
+    ["BillingCountry", "NVARCHAR(40)", {}], ["BillingPostalCode", "NVARCHAR(10)", {}], ["Total", "NUMERIC(10,2)", { nn: 1 }]] },
+  InvoiceLine: { g: "ven", rows: 2240, x: 620, y: 400, desc: "Líneas de factura: una por cada pista comprada.", cols: [
+    ["InvoiceLineId", "INTEGER", { pk: 1 }], ["InvoiceId", "INTEGER", { nn: 1, fk: "Invoice.InvoiceId" }], ["TrackId", "INTEGER", { nn: 1, fk: "Track.TrackId" }],
+    ["UnitPrice", "NUMERIC(10,2)", { nn: 1 }], ["Quantity", "INTEGER", { nn: 1 }]] },
+  Employee: { g: "org", rows: 8, x: 40, y: 40, desc: "Empleados. ReportsTo apunta al jefe de cada uno dentro de la misma tabla (autorrelación).", cols: [
+    ["EmployeeId", "INTEGER", { pk: 1 }], ["LastName", "NVARCHAR(20)", { nn: 1 }], ["FirstName", "NVARCHAR(20)", { nn: 1 }], ["Title", "NVARCHAR(30)", {}],
+    ["ReportsTo", "INTEGER", { fk: "Employee.EmployeeId" }], ["BirthDate", "DATETIME", {}], ["HireDate", "DATETIME", {}],
+    ["Address", "NVARCHAR(70)", {}], ["City", "NVARCHAR(40)", {}], ["State", "NVARCHAR(40)", {}], ["Country", "NVARCHAR(40)", {}],
+    ["PostalCode", "NVARCHAR(10)", {}], ["Phone", "NVARCHAR(24)", {}], ["Fax", "NVARCHAR(24)", {}], ["Email", "NVARCHAR(60)", {}]] }
+};
+const EDGES = [
+  { c: "Album", col: "ArtistId", p: "Artist", r: "v", why: "Cada álbum es de un artista; un artista tiene muchos álbumes." },
+  { c: "Track", col: "AlbumId", p: "Album", r: "h", m: 862, why: "Un álbum contiene muchas pistas. Puede ser NULL: pista sin álbum." },
+  { c: "Track", col: "MediaTypeId", p: "MediaType", r: "h", m: 886, why: "Cada pista tiene un formato obligatorio." },
+  { c: "Track", col: "GenreId", p: "Genre", r: "h", m: 874, why: "Cada pista pertenece, como mucho, a un género." },
+  { c: "PlaylistTrack", col: "PlaylistId", p: "Playlist", r: "v", why: "Mitad de la relación N:M lista–pista." },
+  { c: "PlaylistTrack", col: "TrackId", p: "Track", r: "h", m: 585, why: "Otra mitad de la N:M: una pista está en muchas listas." },
+  { c: "InvoiceLine", col: "TrackId", p: "Track", r: "v", why: "Cada línea de factura vende una pista." },
+  { c: "InvoiceLine", col: "InvoiceId", p: "Invoice", r: "h", m: 585, why: "Una factura tiene muchas líneas." },
+  { c: "Invoice", col: "CustomerId", p: "Customer", r: "h", m: 295, why: "Un cliente tiene muchas facturas." },
+  { c: "Customer", col: "SupportRepId", p: "Employee", r: "v", why: "Un empleado de soporte atiende a muchos clientes." },
+  { c: "Employee", col: "ReportsTo", p: "Employee", r: "self", why: "Autorrelación: cada empleado tiene un jefe que también es empleado." }
+];
+const QUERIES = {
+  Artist: { label: "Artistas con más álbumes", sql: "SELECT ar.Name, COUNT(al.AlbumId) AS albumes\nFROM Artist ar\nLEFT JOIN Album al ON al.ArtistId = ar.ArtistId\nGROUP BY ar.ArtistId\nORDER BY albumes DESC\nLIMIT 5" },
+  Album: { label: "Álbumes con el nombre de su artista", sql: "SELECT al.Title, ar.Name AS artista\nFROM Album al\nJOIN Artist ar ON ar.ArtistId = al.ArtistId\nLIMIT 5" },
+  Track: { label: "Pistas con su álbum y su género", sql: "SELECT t.Name, al.Title AS album, g.Name AS genero\nFROM Track t\nJOIN Album al ON al.AlbumId = t.AlbumId\nJOIN Genre g ON g.GenreId = t.GenreId\nLIMIT 5" },
+  MediaType: { label: "Pistas por formato", sql: "SELECT m.Name, COUNT(*) AS pistas\nFROM MediaType m\nJOIN Track t ON t.MediaTypeId = m.MediaTypeId\nGROUP BY m.MediaTypeId\nORDER BY pistas DESC" },
+  Genre: { label: "Pistas por género", sql: "SELECT g.Name, COUNT(*) AS pistas\nFROM Genre g\nJOIN Track t ON t.GenreId = g.GenreId\nGROUP BY g.GenreId\nORDER BY pistas DESC" },
+  Playlist: { label: "Número de pistas de cada lista", sql: "SELECT p.Name, COUNT(pt.TrackId) AS pistas\nFROM Playlist p\nLEFT JOIN PlaylistTrack pt ON pt.PlaylistId = p.PlaylistId\nGROUP BY p.PlaylistId\nORDER BY pistas DESC" },
+  PlaylistTrack: { label: "La N:M resuelta: lista y pista", sql: "SELECT p.Name AS lista, t.Name AS pista\nFROM PlaylistTrack pt\nJOIN Playlist p ON p.PlaylistId = pt.PlaylistId\nJOIN Track t ON t.TrackId = pt.TrackId\nLIMIT 5" },
+  Customer: { label: "Clientes y su empleado de soporte", sql: "SELECT c.FirstName, c.LastName, e.FirstName AS soporte\nFROM Customer c\nJOIN Employee e ON e.EmployeeId = c.SupportRepId\nLIMIT 5" },
+  Invoice: { label: "Las 5 facturas de mayor importe", sql: "SELECT i.InvoiceId, i.InvoiceDate, c.LastName, i.Total\nFROM Invoice i\nJOIN Customer c ON c.CustomerId = i.CustomerId\nORDER BY i.Total DESC\nLIMIT 5" },
+  InvoiceLine: { label: "Pistas compradas en una factura", sql: "SELECT il.InvoiceId, t.Name, il.UnitPrice, il.Quantity\nFROM InvoiceLine il\nJOIN Track t ON t.TrackId = il.TrackId\nWHERE il.InvoiceId = ?", params: "(1,)" },
+  Employee: { label: "Cada empleado y su jefe (autorrelación)", sql: "SELECT e.FirstName || ' ' || e.LastName AS empleado,\n       j.FirstName || ' ' || j.LastName AS jefe\nFROM Employee e\nLEFT JOIN Employee j ON j.EmployeeId = e.ReportsTo" }
+};
+
+const W = 220, HEAD = 40, ROW = 26, NS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById("er");
+const keyCols = t => T[t].cols.filter(c => c[2].pk || c[2].fk);
+const extra = t => T[t].cols.length - keyCols(t).length;
+const boxH = t => HEAD + ROW * keyCols(t).length + (extra(t) ? 24 : 0) + 10;
+const rowY = (t, col) => T[t].y + HEAD + ROW * keyCols(t).findIndex(c => c[0] === col) + ROW / 2;
+const pkName = t => T[t].cols.find(c => c[2].pk)[0];
+
+function el(tag, attrs, parent, text) {
+  const n = document.createElementNS(NS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (text != null) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+const edgeEls = [], boxEls = {};
+
+function drawEdges(layer) {
+  EDGES.forEach((e, i) => {
+    const c = T[e.c], p = T[e.p];
+    let d, l1, l2;
+    const y1 = rowY(e.c, e.col);
+    const y2 = rowY(e.p, e.p === "PlaylistTrack" ? e.col : pkName(e.p));
+    if (e.r === "v") {
+      const x = c.x + W / 2;
+      if (c.y > p.y) {
+        const top = c.y, bot = p.y + boxH(e.p);
+        d = `M${x},${top} V${bot}`;
+        l1 = [x + 8, top - 8, "N"]; l2 = [x + 8, bot + 16, "1"];
+      } else {
+        const bot = c.y + boxH(e.c), top = p.y;
+        d = `M${x},${bot} V${top}`;
+        l1 = [x + 8, bot + 16, "N"]; l2 = [x + 8, top - 8, "1"];
+      }
+    } else if (e.r === "h") {
+      const right = p.x > c.x;
+      const x1 = right ? c.x + W : c.x, x2 = right ? p.x : p.x + W;
+      d = `M${x1},${y1} H${e.m} V${y2} H${x2}`;
+      const s = right ? 1 : -1;
+      l1 = [x1 + s * 6 + (right ? 0 : -8), y1 - 6, "N"];
+      l2 = [x2 - s * 14 + (right ? 0 : 4), y2 - 6, "1"];
+    } else {
+      const xr = c.x + W, xo = xr + 18, ya = rowY(e.c, e.col), yb = rowY(e.c, pkName(e.c));
+      d = `M${xr},${ya} H${xo} V${yb} H${xr}`;
+      l1 = [xr + 4, ya + 16, "N"]; l2 = [xr + 4, yb - 6, "1"];
+    }
+    const g = el("g", { class: "edge", "data-i": i }, layer);
+    el("path", { class: "ln", d }, g);
+    el("text", { x: l1[0], y: l1[1] }, g, l1[2]);
+    el("text", { x: l2[0], y: l2[1] }, g, l2[2]);
+    const hit = el("path", { class: "hit", d }, g);
+    el("title", {}, hit, `${e.c}.${e.col} → ${e.p}.${pkName(e.p)}`);
+    g.addEventListener("click", ev => {
+      ev.stopPropagation();
+      if (isAdd(ev)) { active.add(e.p); select(e.c, e.col, true); } else select(e.c, e.col);
+    });
+    edgeEls.push(g);
+  });
+}
+
+function drawBoxes(layer) {
+  Object.keys(T).forEach(name => {
+    const t = T[name], h = boxH(name);
+    const g = el("g", { class: "tbl", "data-name": name, tabindex: 0, role: "button", "aria-label": `Tabla ${name}` }, layer);
+    el("rect", { class: "body", x: t.x, y: t.y, width: W, height: h, rx: 10 }, g);
+    el("path", { d: `M${t.x},${t.y + HEAD} V${t.y + 10} Q${t.x},${t.y} ${t.x + 10},${t.y} H${t.x + W - 10} Q${t.x + W},${t.y} ${t.x + W},${t.y + 10} V${t.y + HEAD} Z`, fill: GROUPS[t.g].color }, g);
+    el("text", { class: "head-t", x: t.x + 14, y: t.y + 26 }, g, name);
+    keyCols(name).forEach((c, i) => {
+      const cy = t.y + HEAD + ROW * i + 6;
+      let bx = t.x + 12;
+      if (c[2].pk) { el("rect", { class: "bpk", x: bx, y: cy + 2, width: 22, height: 15, rx: 3 }, g); el("text", { class: "bpk-t", x: bx + 4, y: cy + 13 }, g, "PK"); bx += 26; }
+      if (c[2].fk) { el("rect", { class: "bfk", x: bx, y: cy + 2, width: 22, height: 15, rx: 3 }, g); el("text", { class: "bfk-t", x: bx + 4, y: cy + 13 }, g, "FK"); }
+      el("text", { class: "col-t", x: t.x + 68, y: cy + 14 }, g, c[0]);
+    });
+    if (extra(name)) el("text", { class: "more-t", x: t.x + 14, y: t.y + HEAD + ROW * keyCols(name).length + 18 }, g, `+ ${extra(name)} columnas más`);
+    g.addEventListener("click", ev => { ev.stopPropagation(); select(name, null, isAdd(ev)); });
+    g.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(name, null, isAdd(ev)); } });
+    boxEls[name] = g;
+  });
+}
+
+// Estado: "current" es la tabla de la ficha; "active" son todas las tablas activadas a la vez
+let current = null, active = new Set(), multi = false, groupFilter = "all", codeTab = "sql";
+const isAdd = ev => multi || ev.ctrlKey || ev.metaKey || ev.shiftKey;
+const allActive = () => active.size === Object.keys(T).length;
+
+const edgeLayer = el("g", {}, svg), boxLayer = el("g", {}, svg);
+drawEdges(edgeLayer); drawBoxes(boxLayer);
+
+function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function hlSql(s) { return esc(s).replace(/('[^']*')/g, '<span class="s">$1</span>'); }
+
+function pythonFor(q) {
+  const params = q.params ? `, ${q.params}` : "";
+  const body = q.sql.split("\n").map(l => "    " + l).join("\n");
+  return `import sqlite3\n\nconn = sqlite3.connect("chinook.db")\nsql = """\n${body}\n"""\nfor fila in conn.execute(sql${params}):\n    print(fila)\nconn.close()`;
+}
+function hlPy(s) {
+  return esc(s)
+    .replace(/("""[\s\S]*?""")/g, '<span class="s">$1</span>')
+    .replace(/("chinook\.db")/g, '<span class="s">$1</span>');
+}
+
+function relationsOf(name) {
+  const out = EDGES.filter(e => e.c === name);
+  const inc = EDGES.filter(e => e.p === name && e.c !== name);
+  return { out, inc };
+}
+
+function applyHighlight() {
+  const rel = new Set(active);
+  active.forEach(a => EDGES.forEach(e => { if (e.c === a) rel.add(e.p); if (e.p === a) rel.add(e.c); }));
+  const any = active.size > 0;
+  Object.keys(T).forEach(n => {
+    const inGroup = groupFilter === "all" || T[n].g === groupFilter;
+    const g = boxEls[n];
+    g.classList.toggle("cur", n === current);
+    g.classList.toggle("sel", active.has(n));
+    g.classList.toggle("dim", !inGroup || (any && groupFilter === "all" && !rel.has(n)));
+  });
+  edgeEls.forEach((g, i) => {
+    const e = EDGES[i];
+    const on = active.has(e.c) || active.has(e.p);
+    const inGroup = groupFilter === "all" || (T[e.c].g === groupFilter && T[e.p].g === groupFilter);
+    g.classList.toggle("on", on);
+    g.classList.toggle("dim", !inGroup || (any && groupFilter === "all" && !on));
+  });
+  const ba = document.getElementById("a-all");
+  ba.setAttribute("aria-pressed", String(allActive()));
+  ba.textContent = allActive() ? "Desactivar todas" : "Activar todas";
+  document.getElementById("a-multi").setAttribute("aria-pressed", String(multi));
+  document.getElementById("hint").textContent = active.size > 1
+    ? `${active.size} tablas activas. Vuelve a pulsar una tabla activa (con Ctrl/⌘ o en modo múltiple) para quitarla.`
+    : "Consejo: Ctrl/⌘ + clic (o «Selección múltiple») suma tablas a la selección sin perder las anteriores.";
+}
+
+// add = true: suma la tabla a las activas (o la quita si ya era la de la ficha)
+function select(name, col, add) {
+  if (add) {
+    if (name === current && active.has(name) && active.size > 1) {
+      active.delete(name);
+      name = [...active].pop();
+      col = null;
+    } else active.add(name);
+  } else active = new Set([name]);
+  current = name;
+  if (groupFilter !== "all" && T[name].g !== groupFilter) setGroup("all");
+  applyHighlight();
+  renderPanel(name, col);
+  try { localStorage.setItem("chinook-sel", name); } catch (e) {}
+}
+
+document.getElementById("a-all").addEventListener("click", () => {
+  if (allActive()) active = new Set([current]);
+  else { active = new Set(Object.keys(T)); if (groupFilter !== "all") setGroup("all"); }
+  applyHighlight();
+});
+document.getElementById("a-multi").addEventListener("click", () => { multi = !multi; applyHighlight(); });
+
+function renderPanel(name, col) {
+  const t = T[name], q = QUERIES[name], { out, inc } = relationsOf(name);
+  const panel = document.getElementById("panel");
+  const nCols = t.cols.length, nPk = t.cols.filter(c => c[2].pk).length;
+  const rowsHtml = t.cols.map(c => {
+    const o = c[2];
+    const k = (o.pk ? '<span class="badge pk">PK</span>' : "") + (o.fk ? '<span class="badge fk">FK</span>' : "");
+    const req = o.pk || o.nn;
+    const ref = o.fk ? `<button class="ref" type="button" data-go="${o.fk.split(".")[0]}">→ ${o.fk}</button>` : "";
+    return `<tr class="${c[0] === col ? "hl" : ""}"><td class="k">${k}</td><td class="cn">${c[0]}${ref}</td><td class="ty">${c[1]}</td><td><span class="nn ${req ? "req" : ""}">${req ? "Sí" : "No"}</span></td></tr>`;
+  }).join("");
+  const relItem = (e, dir) => {
+    const target = dir === "out" ? e.p : e.c;
+    const path = `${e.c}.${e.col} → ${e.p}.${e.p === "PlaylistTrack" ? e.col : pkName(e.p)}`;
+    const card = e.c === e.p ? "N — 1" : dir === "out" ? "N — 1" : "1 — N";
+    return `<button class="rel" type="button" data-go="${target}"><span class="card">${card}</span><span class="path">${path}</span><span class="why">${e.why}</span></button>`;
+  };
+  const relsHtml = out.map(e => relItem(e, "out")).join("") + inc.map(e => relItem(e, "in")).join("");
+  const code = codeTab === "sql" ? hlSql(q.sql + ";") : hlPy(pythonFor(q));
+  panel.innerHTML = `
+    <div class="p-head">
+      <div class="p-top"><h2 class="p-name">${name}</h2><span class="group-pill" style="background:${GROUPS[t.g].color}">${GROUPS[t.g].name}</span></div>
+      <p class="p-desc">${t.desc}</p>
+      <div class="p-meta">${t.rows.toLocaleString("es-ES")} filas · ${nCols} columnas · clave primaria ${nPk > 1 ? "compuesta" : "simple"}</div>
+    </div>
+    <div>
+      <h2 class="sec">Columnas</h2>
+      <div class="cols-wrap"><table class="cols">
+        <thead><tr><th>Clave</th><th>Columna</th><th>Tipo</th><th>Obligatoria</th></tr></thead>
+        <tbody>${rowsHtml}</tbody>
+      </table></div>
+    </div>
+    <div>
+      <h2 class="sec">Relaciones</h2>
+      ${relsHtml ? `<div class="rels">${relsHtml}</div>` : '<p class="empty-note">Sin relaciones.</p>'}
+    </div>
+    <div>
+      <h2 class="sec">Consulta de ejemplo</h2>
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" id="tab-sql" aria-selected="${codeTab === "sql"}" data-tab="sql">SQL</button>
+        <button class="tab" role="tab" id="tab-py" aria-selected="${codeTab === "py"}" data-tab="py">Python</button>
+      </div>
+      <div class="code-box"><pre class="code" id="code">${code}</pre><button class="copy" id="copy" type="button">Copiar</button></div>
+      <p class="q-label">${q.label}</p>
+    </div>`;
+  panel.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", () => {
+    select(b.dataset.go, null, multi);
+    if (window.matchMedia("(max-width: 1100px)").matches) document.querySelector(".diagram").scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  panel.querySelectorAll("[data-tab]").forEach(b => b.addEventListener("click", () => { codeTab = b.dataset.tab; renderPanel(name, col); }));
+  panel.querySelector("#copy").addEventListener("click", ev => {
+    const text = codeTab === "sql" ? q.sql + ";" : pythonFor(q);
+    const btn = ev.currentTarget;
+    const done = () => { btn.textContent = "Copiado"; setTimeout(() => btn.textContent = "Copiar", 1500); };
+    const fallback = () => {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById("code"));
+      const s = getSelection(); s.removeAllRanges(); s.addRange(r); btn.textContent = "Seleccionado: pulsa Ctrl+C";
+    };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  });
+}
+
+function setGroup(g) {
+  groupFilter = g;
+  document.querySelectorAll(".chip[data-g]").forEach(c => c.setAttribute("aria-pressed", String(c.dataset.g === g)));
+  applyHighlight();
+}
+document.querySelectorAll(".chip[data-g]").forEach(c => c.addEventListener("click", () => {
+  setGroup(c.dataset.g);
+  if (c.dataset.g !== "all" && current && T[current].g !== c.dataset.g) {
+    const first = Object.keys(T).find(n => T[n].g === c.dataset.g);
+    current = first; active = new Set([first]); applyHighlight(); renderPanel(first);
+  }
+}));
+
+// Búsqueda de columnas
+const q = document.getElementById("q"), results = document.getElementById("results");
+q.addEventListener("input", () => {
+  const term = q.value.trim().toLowerCase();
+  Object.values(boxEls).forEach(g => g.classList.remove("match"));
+  results.innerHTML = "";
+  if (!term) return;
+  const hits = [];
+  Object.keys(T).forEach(n => T[n].cols.forEach(c => { if (c[0].toLowerCase().includes(term)) hits.push([n, c[0]]); }));
+  new Set(hits.map(h => h[0])).forEach(n => boxEls[n].classList.add("match"));
+  if (!hits.length) { results.innerHTML = `<span class="res-note">Ninguna columna contiene «${esc(q.value.trim())}».</span>`; return; }
+  results.innerHTML = `<span class="res-note">${hits.length} columna${hits.length > 1 ? "s" : ""} en ${new Set(hits.map(h => h[0])).size} tabla${new Set(hits.map(h => h[0])).size > 1 ? "s" : ""}:</span>` +
+    hits.slice(0, 24).map(h => `<button class="res" type="button" data-t="${h[0]}" data-c="${h[1]}">${h[0]}.${h[1]}</button>`).join("");
+  results.querySelectorAll(".res").forEach(b => b.addEventListener("click", ev => select(b.dataset.t, b.dataset.c, isAdd(ev))));
+});
+
+// Zoom
+const BASE = 1170;
+let zoom = 0; // 0 = ajustar al ancho
+function applyZoom() { svg.style.width = zoom ? `${BASE * zoom}px` : "100%"; svg.style.minWidth = zoom ? "" : "0"; }
+document.getElementById("z-in").addEventListener("click", () => { zoom = Math.min((zoom || currentScale()) + 0.2, 2); applyZoom(); });
+document.getElementById("z-out").addEventListener("click", () => { zoom = Math.max((zoom || currentScale()) - 0.2, 0.5); applyZoom(); });
+document.getElementById("z-fit").addEventListener("click", () => { zoom = 0; applyZoom(); });
+function currentScale() { return svg.getBoundingClientRect().width / BASE; }
+if (window.matchMedia("(max-width: 700px)").matches) zoom = 0.8;
+applyZoom();
+
+// Recuento de la cabecera
+document.getElementById("st-t").textContent = Object.keys(T).length;
+document.getElementById("st-r").textContent = EDGES.length;
+document.getElementById("st-c").textContent = Object.values(T).reduce((a, t) => a + t.cols.length, 0);
+
+// Estado inicial: #Tabla en el enlace, la última consultada o Track
+let start = "Track";
+try { const s = localStorage.getItem("chinook-sel"); if (s && T[s]) start = s; } catch (e) {}
+const h = decodeURIComponent(location.hash.slice(1));
+if (T[h]) start = h;
+select(start);
+if (h.toLowerCase() === "todas") { active = new Set(Object.keys(T)); applyHighlight(); }
+</script>
+
+</body></html>
